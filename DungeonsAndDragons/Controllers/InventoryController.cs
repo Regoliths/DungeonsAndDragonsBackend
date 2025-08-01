@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using DungeonsAndDragons.Models;
+using DungeonsAndDragons.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace DungeonsAndDragons.Controllers;
@@ -9,66 +10,51 @@ namespace DungeonsAndDragons.Controllers;
 public class InventoryController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
+    private InventoryService _inventoryService;
 
     public InventoryController(ApplicationDbContext context)
     {
         _context = context;
+        _inventoryService = new InventoryService(_context);
     }
 
     [HttpGet("{characterId}")]
     public ActionResult<IEnumerable<Item>> GetInventory(int characterId)
     {
-        var character = _context.PlayerCharacters
-            .Include(c => c.Inventory)
-            .FirstOrDefault(c => c.Id == characterId);
-
-        if (character == null)
+        var items = _inventoryService.GetInventoryAsync(characterId);
+        if (items == null || !items.Result.Any())
         {
-            return NotFound($"Character with ID {characterId} not found.");
+            return NotFound($"No items found for character with ID {characterId}.");
         }
-
-        return Ok(character.Inventory);
+        return Ok(items.Result);
     }
 
     [HttpGet("{characterId}/{itemId}")]
     public ActionResult<Item> GetItem(int characterId, int itemId)
     {
-        var character = _context.PlayerCharacters
-            .Include(c => c.Inventory)
-            .FirstOrDefault(c => c.Id == characterId);
-
-        if (character == null)
-        {
-            return NotFound($"Character with ID {characterId} not found.");
-        }
-
-        var item = character.Inventory.FirstOrDefault(i => i.Id == itemId);
-
+        var item = _inventoryService.GetItemAsync(characterId, itemId);
         if (item == null)
         {
             return NotFound($"Item with ID {itemId} not found in character {characterId}'s inventory.");
         }
-
-        return Ok(item);
+        return Ok(item.Result);
     }
 
     [HttpPost("{characterId}")]
     public ActionResult<Item> AddItem(int characterId, [FromBody] Item item)
     {
-        var character = _context.PlayerCharacters
-            .Include(c => c.Inventory)
-            .FirstOrDefault(c => c.Id == characterId);
+        if (item == null)
+        {
+            return BadRequest("Item cannot be null.");
+        }
 
-        if (character == null)
+        var addedItem = _inventoryService.AddItemAsync(characterId, item);
+        if (addedItem == null)
         {
             return NotFound($"Character with ID {characterId} not found.");
         }
 
-        item.PlayerCharacter = character;
-        _context.Items.Add(item);
-        _context.SaveChanges();
-
-        return CreatedAtAction(nameof(GetItem), new { characterId = characterId, itemId = item.Id }, item);
+        return CreatedAtAction(nameof(GetItem), new { characterId = characterId, itemId = addedItem.Result.Id }, addedItem.Result);
     }
 
     [HttpPut("{characterId}/{itemId}")]
@@ -105,25 +91,8 @@ public class InventoryController : ControllerBase
     [HttpDelete("{characterId}/{itemId}")]
     public ActionResult DeleteItem(int characterId, int itemId)
     {
-        var character = _context.PlayerCharacters
-            .Include(c => c.Inventory)
-            .FirstOrDefault(c => c.Id == characterId);
-
-        if (character == null)
-        {
-            return NotFound($"Character with ID {characterId} not found.");
-        }
-
-        var item = character.Inventory.FirstOrDefault(i => i.Id == itemId);
-
-        if (item == null)
-        {
-            return NotFound($"Item with ID {itemId} not found in character {characterId}'s inventory.");
-        }
-
-        _context.Items.Remove(item);
-        _context.SaveChanges();
-
+       _inventoryService.RemoveItem(characterId, itemId);
+       
         return NoContent();
     }
 }

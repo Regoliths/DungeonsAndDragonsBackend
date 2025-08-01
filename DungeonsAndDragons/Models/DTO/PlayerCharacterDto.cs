@@ -15,7 +15,9 @@ public class PlayerCharacterDto
     public int Wisdom { get; set; }
     public int Charisma { get; set; }
     public int HitPoints { get; set; }
+    public int HitDice { get; set; } // Represents the size of the hit die (e.g., d6, d8)
     public int ArmorClass { get; set; }
     public int Speed { get; set; }
+    public int Initiative => 10 + Dexterity; // Initiative is calculated based on Dexterity
     public string Notes { get; set; } = string.Empty; // New property for additional notes
 }

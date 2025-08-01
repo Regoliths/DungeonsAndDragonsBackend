@@ -23,7 +23,7 @@ public class CharacterController : ControllerBase
     }
     
     [HttpGet]
-    public ActionResult<IEnumerable<PlayerCharacter>> GetAllCharacters()
+    public ActionResult<IEnumerable<Character>> GetAllCharacters()
     {
         var characters = _characterService.GetAllCharacters();
 
@@ -36,7 +36,7 @@ public class CharacterController : ControllerBase
     }
 
     [HttpGet("{characterId}")]
-    public ActionResult<PlayerCharacter> GetCharacter(int characterId)
+    public ActionResult<Character> GetCharacter(int characterId)
     {
         var character = _characterService.GetCharacter(characterId);
 
@@ -49,7 +49,7 @@ public class CharacterController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<PlayerCharacter> CreateCharacter([FromBody] PlayerCharacterDto characterDto)
+    public ActionResult<Character> CreateCharacter([FromBody] PlayerCharacterDto characterDto)
     {
         var character = _characterService.CreateCharacter(characterDto); 
 

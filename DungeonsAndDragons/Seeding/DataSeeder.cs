@@ -16,14 +16,15 @@ public static class DataSeeder
                     Username = "Player1",
                     Email = "player1@example.com",
                     PasswordHash = "hashedpassword1",
-                    Characters = new List<PlayerCharacter>
+                    Characters = new List<Character>
                     {
-                        new PlayerCharacter
+                        new Character
                         {
                             Id = 1,
                             Name = "Aragorn",
                             Race = Race.Human, // Fixed to use Race enum
                             Class = PlayerClass.Ranger,
+                            Background = Background.Noble,
                             Subclass = "Hunter",
                             Level = 5,
                             Strength = 16,
@@ -42,12 +43,13 @@ public static class DataSeeder
                                 new Item { Id = 2, Name = "Shield", Description = "A sturdy shield", Type = "Armor", Quantity = 1, Weight = 5, Cost = 75 }
                             }
                         },
-                        new PlayerCharacter
+                        new Character
                         {
                             Id = 2,
                             Name = "Legolas",
                             Race = Race.Elf, // Fixed to use Race enum
                             Class = PlayerClass.Ranger,
+                            Background = Background.Soldier,
                             Subclass = "Archer",
                             Level = 4,
                             Strength = 12,
@@ -74,14 +76,15 @@ public static class DataSeeder
                     Username = "Player2",
                     Email = "player2@example.com",
                     PasswordHash = "hashedpassword2",
-                    Characters = new List<PlayerCharacter>
+                    Characters = new List<Character>
                     {
-                        new PlayerCharacter
+                        new Character
                         {
                             Id = 3,
                             Name = "Gimli",
                             Race = Race.Dwarf, // Fixed to use Race enum
                             Class = PlayerClass.Fighter,
+                            Background = Background.Soldier,
                             Subclass = "Champion",
                             Level = 6,
                             Strength = 18,
@@ -100,12 +103,13 @@ public static class DataSeeder
                                 new Item { Id = 6, Name = "Helmet", Description = "A sturdy helmet", Type = "Armor", Quantity = 1, Weight = 3, Cost = 40 }
                             }
                         },
-                        new PlayerCharacter
+                        new Character
                         {
                             Id = 4,
                             Name = "Thorin",
                             Race = Race.Dwarf, // Fixed to use Race enum
                             Class = PlayerClass.Fighter,
+                            Background = Background.Noble,
                             Subclass = "Champion",
                             Level = 5,
                             Strength = 16,
@@ -132,14 +136,15 @@ public static class DataSeeder
                     Username = "Player3",
                     Email = "player3@example.com",
                     PasswordHash = "hashedpassword3",
-                    Characters = new List<PlayerCharacter>
+                    Characters = new List<Character>
                     {
-                        new PlayerCharacter
+                        new Character
                         {
                             Id = 5,
                             Name = "Gandalf",
                             Race = Race.Human, // Fixed to use Race enum
                             Class = PlayerClass.Wizard,
+                            Background = Background.Sage,
                             Subclass = "Evoker",
                             Level = 10,
                             Strength = 10,
@@ -158,12 +163,13 @@ public static class DataSeeder
                                 new Item { Id = 10, Name = "Spellbook", Description = "A book of spells", Type = "Miscellaneous", Quantity = 1, Weight = 2, Cost = 300 }
                             }
                         },
-                        new PlayerCharacter
+                        new Character
                         {
                             Id = 6,
                             Name = "Saruman",
                             Race = Race.Human, // Fixed to use Race enum
                             Class = PlayerClass.Wizard,
+                            Background = Background.Sage,
                             Subclass = "Necromancer",
                             Level = 9,
                             Strength = 10,

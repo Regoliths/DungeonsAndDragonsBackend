@@ -32,12 +32,6 @@ public class Monster
     public ICollection<LegendaryAction> LegendaryActions { get; set; } = new List<LegendaryAction>(); // Legendary actions
 }
 
-public class Proficiency
-{
-    public string Name { get; set; } = string.Empty; // Name of the proficiency
-    public int Value { get; set; } // Proficiency value
-}
-
 public class SpecialAbility
 {
     public string Name { get; set; } = string.Empty; // Name of the special ability

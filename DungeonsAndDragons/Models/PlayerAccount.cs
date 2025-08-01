@@ -6,5 +6,5 @@ public class PlayerAccount
     public string Username { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
-    public ICollection<PlayerCharacter> Characters { get; set; } = new List<PlayerCharacter>();
+    public ICollection<Character> Characters { get; set; } = new List<Character>();
 }

@@ -9,6 +9,6 @@ public class Item
     public int Quantity { get; set; } // Number of items
     public int Weight { get; set; } // Weight of the item
     public int Cost { get; set; } // Cost of the item in gold pieces
-    public PlayerCharacter? PlayerCharacter { get; set; } // Link to the owning character
+    public Character? PlayerCharacter { get; set; } // Link to the owning character
     
 }

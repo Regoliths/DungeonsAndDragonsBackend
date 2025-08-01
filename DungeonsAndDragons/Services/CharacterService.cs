@@ -11,6 +11,7 @@ public class CharacterService
     private Dictionary<string, Race> _raceMapping;
     private Dictionary<string, PlayerClass> _classMapping;
     private Dictionary<string, Alignment> _alignmentMapping;
+    private Dictionary<string, Background> _backgroundMapping;
     public CharacterService(ApplicationDbContext context)
     {
         _context = context;
@@ -57,17 +58,32 @@ public class CharacterService
             { "Aasimar", Race.Aasimar },
             { "Firbolg", Race.Firbolg }
         };
+        _backgroundMapping = new Dictionary<string, Background>
+        {
+            { "Acolyte", Background.Acolyte },
+            { "Charlatan", Background.Charlatan },
+            { "Criminal", Background.Criminal },
+            { "Entertainer", Background.Entertainer },
+            { "Folk Hero", Background.FolkHero },
+            { "Guild Artisan", Background.GuildArtisan },
+            { "Hermit", Background.Hermit },
+            { "Noble", Background.Noble },
+            { "Outlander", Background.Outlander },
+            { "Sage", Background.Sage },
+            { "Soldier", Background.Soldier },
+            { "Urchin", Background.Urchin }
+        };
     }
 
-    public PlayerCharacter CreateCharacter(PlayerCharacterDto characterDto)
+    public Character CreateCharacter(PlayerCharacterDto characterDto)
     {
 
-        var character = new PlayerCharacter
+        var character = new Character
         {
             Name = characterDto.Name,
             Race = _raceMapping.ContainsKey(characterDto.Race) ? _raceMapping[characterDto.Race] : Race.Human,
             Class = _classMapping.ContainsKey(characterDto.Class) ? _classMapping[characterDto.Class] : PlayerClass.Barbarian,
-            Background = characterDto.Background,
+            Background = _backgroundMapping.ContainsKey(characterDto.Background) ? _backgroundMapping[characterDto.Background] : Background.Acolyte,
             Alignment = _alignmentMapping.ContainsKey(characterDto.Alignment) ? _alignmentMapping[characterDto.Alignment] : Alignment.TrueNeutral,
             Level = characterDto.Level,
             Strength = characterDto.Strength,
@@ -77,8 +93,10 @@ public class CharacterService
             Wisdom = characterDto.Wisdom,
             Charisma = characterDto.Charisma,
             HitPoints = characterDto.HitPoints,
+            HitDice = HitDieSize(_classMapping.ContainsKey(characterDto.Class) ? _classMapping[characterDto.Class] : PlayerClass.Barbarian),
             ArmorClass = characterDto.ArmorClass,
             Speed = characterDto.Speed,
+            Initiative = 10 + characterDto.Dexterity, // Initiative is calculated based on Dexterity
             Notes = characterDto.Notes
         };
 
@@ -88,12 +106,13 @@ public class CharacterService
         return character;
     }
 
-    public void UpdateCharacter(PlayerCharacterDto characterDto, PlayerCharacter character)
+    public void UpdateCharacter(PlayerCharacterDto characterDto, Character character)
     {
         
         character.Name = characterDto.Name;
         character.Race = _raceMapping.ContainsKey(characterDto.Race) ? _raceMapping[characterDto.Race] : character.Race;
         character.Class = _classMapping.ContainsKey(characterDto.Class) ? _classMapping[characterDto.Class] : character.Class;
+        character.Background = _backgroundMapping.ContainsKey(characterDto.Background) ? _backgroundMapping[characterDto.Background] : character.Background;
         character.Level = characterDto.Level;
         character.Strength = characterDto.Strength;
         character.Dexterity = characterDto.Dexterity;
@@ -102,7 +121,9 @@ public class CharacterService
         character.Wisdom = characterDto.Wisdom;
         character.Charisma = characterDto.Charisma;
         character.HitPoints = characterDto.HitPoints;
+        character.HitDice = HitDieSize(_classMapping.ContainsKey(characterDto.Class) ? _classMapping[characterDto.Class] : character.Class);
         character.Speed = characterDto.Speed;
+        character.Initiative = 10 + characterDto.Dexterity; // Initiative is calculated based on Dexterity
         character.ArmorClass = characterDto.ArmorClass;
         character.Alignment = _alignmentMapping.ContainsKey(characterDto.Alignment) ? _alignmentMapping[characterDto.Alignment] :character.Alignment;
 
@@ -110,7 +131,7 @@ public class CharacterService
 
     } 
     
-    public PlayerCharacter? GetCharacter(int characterId)
+    public Character? GetCharacter(int characterId)
     {
         var character = _context.PlayerCharacters
             .Include(c => c.Inventory)
@@ -119,9 +140,29 @@ public class CharacterService
         return character;
     }
     
-    public IEnumerable<PlayerCharacter> GetAllCharacters()
+    public IEnumerable<Character> GetAllCharacters()
     {
         return _context.PlayerCharacters.ToList();
+    }
+    
+    private int HitDieSize(PlayerClass playerClass)
+    {
+        return playerClass switch
+        {
+            PlayerClass.Barbarian => 12,
+            PlayerClass.Bard => 8,
+            PlayerClass.Cleric => 8,
+            PlayerClass.Druid => 8,
+            PlayerClass.Fighter => 10,
+            PlayerClass.Monk => 8,
+            PlayerClass.Paladin => 10,
+            PlayerClass.Ranger => 10,
+            PlayerClass.Rogue => 8,
+            PlayerClass.Sorcerer => 6,
+            PlayerClass.Warlock => 8,
+            PlayerClass.Wizard => 6,
+            _ => throw new ArgumentOutOfRangeException(nameof(playerClass), "Unknown player class")
+        };
     }
     
 }
