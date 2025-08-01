@@ -1,0 +1,6 @@
+﻿services:
+  dungeonsanddragons:
+    image: dungeonsanddragons
+    build:
+      context: .
+      dockerfile: DungeonsAndDragons/Dockerfile
