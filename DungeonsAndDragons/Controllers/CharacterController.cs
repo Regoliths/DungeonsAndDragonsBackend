@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DungeonsAndDragons.Models;
+using DungeonsAndDragons.Models.DTO;
 using DungeonsAndDragons.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace DungeonsAndDragons.Controllers;

@@ -1,4 +1,5 @@
 using DungeonsAndDragons.Models;
+using DungeonsAndDragons.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace DungeonsAndDragons.Services;
@@ -50,7 +51,7 @@ public class CharacterService
             { "Gnome", Race.Gnome },
             { "Half-Elf", Race.HalfElf },
             { "Half-Orc", Race.HalfOrc },
-            { "Tiefling", Race.Halfling },
+            { "Tiefling", Race.Tiefling },
             { "Genasi", Race.Genasi },
             { "Goliath", Race.Goliath },
             { "Aasimar", Race.Aasimar },

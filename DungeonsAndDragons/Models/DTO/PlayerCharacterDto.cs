@@ -1,4 +1,4 @@
-namespace DungeonsAndDragons.Models;
+namespace DungeonsAndDragons.Models.DTO;
 
 public class PlayerCharacterDto
 {
