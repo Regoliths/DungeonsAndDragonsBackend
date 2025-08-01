@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using DungeonsAndDragons.Models;
+using DungeonsAndDragons.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace DungeonsAndDragons.Controllers;
 
@@ -9,18 +11,34 @@ namespace DungeonsAndDragons.Controllers;
 public class CharacterController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<CharacterController> _logger;
+    private readonly CharacterService _characterService;
 
     public CharacterController(ApplicationDbContext context)
     {
         _context = context;
+        _logger = context.GetService<ILogger<CharacterController>>();
+        _characterService = new CharacterService(_context); 
+
+    }
+    
+    [HttpGet]
+    public ActionResult<IEnumerable<PlayerCharacter>> GetAllCharacters()
+    {
+        var characters = _characterService.GetAllCharacters();
+
+        if (characters == null || !characters.Any())
+        {
+            return NotFound("No characters found.");
+        }
+
+        return Ok(characters);
     }
 
     [HttpGet("{characterId}")]
     public ActionResult<PlayerCharacter> GetCharacter(int characterId)
     {
-        var character = _context.PlayerCharacters
-            .Include(c => c.Inventory)
-            .FirstOrDefault(c => c.Id == characterId);
+        var character = _characterService.GetCharacter(characterId);
 
         if (character == null)
         {
@@ -33,27 +51,7 @@ public class CharacterController : ControllerBase
     [HttpPost]
     public ActionResult<PlayerCharacter> CreateCharacter([FromBody] PlayerCharacterDto characterDto)
     {
-        var character = new PlayerCharacter
-        {
-            Name = characterDto.Name,
-            Race = characterDto.Race,
-            Class = characterDto.Class, // Updated to use PlayerClass enum
-            Subclass = characterDto.Subclass,
-            Level = characterDto.Level,
-            Strength = characterDto.Strength,
-            Dexterity = characterDto.Dexterity,
-            Constitution = characterDto.Constitution,
-            Intelligence = characterDto.Intelligence,
-            Wisdom = characterDto.Wisdom,
-            Charisma = characterDto.Charisma,
-            HitPoints = characterDto.HitPoints,
-            Speed = characterDto.Speed,
-            ArmorClass = characterDto.ArmorClass,
-            Alignment = characterDto.Alignment,
-        };
-
-        _context.PlayerCharacters.Add(character);
-        _context.SaveChanges();
+        var character = _characterService.CreateCharacter(characterDto); 
 
         return CreatedAtAction(nameof(GetCharacter), new { characterId = character.Id }, character);
     }
@@ -61,31 +59,15 @@ public class CharacterController : ControllerBase
     [HttpPut("{characterId}")]
     public ActionResult UpdateCharacter(int characterId, [FromBody] PlayerCharacterDto characterDto)
     {
-        var character = _context.PlayerCharacters.FirstOrDefault(c => c.Id == characterId);
+        var character = _characterService.GetCharacter(characterId);
 
         if (character == null)
         {
             return NotFound($"Character with ID {characterId} not found.");
         }
 
-        character.Name = characterDto.Name;
-        character.Race = characterDto.Race;
-        character.Class = characterDto.Class; // Updated to use PlayerClass enum
-        character.Subclass = characterDto.Subclass;
-        character.Level = characterDto.Level;
-        character.Strength = characterDto.Strength;
-        character.Dexterity = characterDto.Dexterity;
-        character.Constitution = characterDto.Constitution;
-        character.Intelligence = characterDto.Intelligence;
-        character.Wisdom = characterDto.Wisdom;
-        character.Charisma = characterDto.Charisma;
-        character.HitPoints = characterDto.HitPoints;
-        character.Speed = characterDto.Speed;
-        character.ArmorClass = characterDto.ArmorClass;
-        character.Alignment = characterDto.Alignment;
-
-        _context.SaveChanges();
-
+        _characterService.UpdateCharacter(characterDto, character);
+        
         return NoContent();
     }
 

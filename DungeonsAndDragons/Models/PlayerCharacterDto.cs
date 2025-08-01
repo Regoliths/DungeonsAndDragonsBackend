@@ -3,9 +3,10 @@ namespace DungeonsAndDragons.Models;
 public class PlayerCharacterDto
 {
     public string Name { get; set; } = string.Empty;
-    public Race Race { get; set; }
-    public PlayerClass Class { get; set; } // Updated to use PlayerClass enum
-    public string Subclass { get; set; } = string.Empty;
+    public string Race { get; set; } = string.Empty; // Updated to accept string for flexibility
+    public string Class { get; set; } = string.Empty; // Updated to accept string for flexibility
+    public string Background { get; set; } = string.Empty; // New property for character background
+    public string Alignment { get; set; } = string.Empty; // Updated to accept string for flexibility
     public int Level { get; set; }
     public int Strength { get; set; }
     public int Dexterity { get; set; }
@@ -14,7 +15,7 @@ public class PlayerCharacterDto
     public int Wisdom { get; set; }
     public int Charisma { get; set; }
     public int HitPoints { get; set; }
-    public int Speed { get; set; } = 30; // Default speed for a human is 30 feet
-    public int ArmorClass { get; set; } // Armor class of the character
-    public Alignment Alignment { get; set; } // Alignment of the character
+    public int ArmorClass { get; set; }
+    public int Speed { get; set; }
+    public string Notes { get; set; } = string.Empty; // New property for additional notes
 }
