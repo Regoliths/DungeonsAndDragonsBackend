@@ -8,70 +8,70 @@ public class CharacterService
 {
     private readonly ApplicationDbContext _context;
 
-    private Dictionary<string, Race> _raceMapping;
-    private Dictionary<string, PlayerClass> _classMapping;
-    private Dictionary<string, Alignment> _alignmentMapping;
-    private Dictionary<string, Background> _backgroundMapping;
+    private Dictionary<int, Race> _raceMapping;
+    private Dictionary<int, PlayerClass> _classMapping;
+    private Dictionary<int, Alignment> _alignmentMapping;
+    private Dictionary<int, Background> _backgroundMapping;
     public CharacterService(ApplicationDbContext context)
     {
         _context = context;
-        _alignmentMapping = new Dictionary<string, Alignment>
+        _alignmentMapping = new Dictionary<int, Alignment>
         {
-            { "Lawful Good", Alignment.LawfulGood },
-            { "Neutral Good", Alignment.NeutralGood },
-            { "Chaotic Good", Alignment.ChaoticGood },
-            { "Lawful Neutral", Alignment.LawfulNeutral },
-            { "True Neutral", Alignment.TrueNeutral },
-            { "Chaotic Neutral", Alignment.ChaoticNeutral },
-            { "Lawful Evil", Alignment.LawfulEvil },
-            { "Neutral Evil", Alignment.NeutralEvil },
-            { "Chaotic Evil", Alignment.ChaoticEvil }
+            { 1, Alignment.LawfulGood },
+            { 2, Alignment.NeutralGood },
+            { 3, Alignment.ChaoticGood },
+            { 4, Alignment.LawfulNeutral },
+            { 5, Alignment.TrueNeutral },
+            { 6, Alignment.ChaoticNeutral },
+            { 7, Alignment.LawfulEvil },
+            { 8, Alignment.NeutralEvil },
+            { 9, Alignment.ChaoticEvil }
         };
-        _classMapping = new Dictionary<string, PlayerClass>
+        _classMapping = new Dictionary<int, PlayerClass>
         {
-            { "Barbarian", PlayerClass.Barbarian },
-            { "Bard", PlayerClass.Bard },
-            { "Cleric", PlayerClass.Cleric },
-            { "Druid", PlayerClass.Druid },
-            { "Fighter", PlayerClass.Fighter },
-            { "Monk", PlayerClass.Monk },
-            { "Paladin", PlayerClass.Paladin },
-            { "Ranger", PlayerClass.Ranger },
-            { "Rogue", PlayerClass.Rogue },
-            { "Sorcerer", PlayerClass.Sorcerer },
-            { "Warlock", PlayerClass.Warlock },
-            { "Wizard", PlayerClass.Wizard }
+            { 1, PlayerClass.Barbarian },
+            { 2, PlayerClass.Bard },
+            { 3, PlayerClass.Cleric },
+            { 4, PlayerClass.Druid },
+            { 5, PlayerClass.Fighter },
+            { 6, PlayerClass.Monk },
+            { 7, PlayerClass.Paladin },
+            { 8, PlayerClass.Ranger },
+            { 9, PlayerClass.Rogue },
+            { 10, PlayerClass.Sorcerer },
+            { 11, PlayerClass.Warlock },
+            { 12, PlayerClass.Wizard }
         };
-        _raceMapping = new Dictionary<string, Race>
+        _raceMapping = new Dictionary<int, Race>
         {
-            { "Human", Race.Human },
-            { "Elf", Race.Elf },
-            { "Dwarf", Race.Dwarf },
-            { "Halfling", Race.Halfling },
-            { "Dragonborn", Race.Dragonborn },
-            { "Gnome", Race.Gnome },
-            { "Half-Elf", Race.HalfElf },
-            { "Half-Orc", Race.HalfOrc },
-            { "Tiefling", Race.Tiefling },
-            { "Genasi", Race.Genasi },
-            { "Goliath", Race.Goliath },
-            { "Aasimar", Race.Aasimar },
-            { "Firbolg", Race.Firbolg }
+            { 0, Race.Human },
+            { 1, Race.Elf },
+            { 2, Race.Dwarf },
+            { 3, Race.Halfling },
+            { 4, Race.Dragonborn },
+            { 5, Race.Gnome },
+            { 6, Race.HalfElf },
+            { 7, Race.HalfOrc },
+            { 8, Race.Tiefling },
+            { 9, Race.Genasi },
+            { 10,Race.Goliath },
+            {  11, Race.Aasimar },
+            {  12, Race.Firbolg }
         };
-        _backgroundMapping = new Dictionary<string, Background>
+        _backgroundMapping = new Dictionary<int, Background>
         {
-            { "Acolyte", Background.Acolyte },
-            { "Charlatan", Background.Charlatan },
-            { "Criminal", Background.Criminal },
-            { "Entertainer", Background.Entertainer },
-            { "Folk Hero", Background.FolkHero },
-            { "Guild Artisan", Background.GuildArtisan },
-            { "Hermit", Background.Hermit },
-            { "Noble", Background.Noble },
-            { "Outlander", Background.Outlander },
-            { "Sage", Background.Sage },
-            { "Soldier", Background.Soldier },
-            { "Urchin", Background.Urchin }
+            { 1, Background.Acolyte },
+            { 2, Background.Charlatan },
+            { 3, Background.Criminal },
+            { 4, Background.Entertainer },
+            { 5, Background.FolkHero },
+            { 6, Background.GuildArtisan },
+            { 7, Background.Hermit },
+            { 8, Background.Noble },
+            { 9, Background.Outlander },
+            { 10, Background.Sage },
+            { 11, Background.Soldier },
+            { 12, Background.Urchin }
         };
     }
 
@@ -134,7 +134,8 @@ public class CharacterService
     public Character? GetCharacter(int characterId)
     {
         var character = _context.PlayerCharacters
-            .Include(c => c.Inventory)
+            .Include(c => c.Inventory).ThenInclude(i => i.Items)
+            .Include(c => c.Equipment).ThenInclude(i => i.Items)
             .FirstOrDefault(c => c.Id == characterId);
 
         return character;

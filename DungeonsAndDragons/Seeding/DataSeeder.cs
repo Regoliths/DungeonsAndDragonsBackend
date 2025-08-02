@@ -1,3 +1,4 @@
+using DungeonsAndDragons.Factory;
 using DungeonsAndDragons.Models;
 
 namespace DungeonsAndDragons.Seeding;
@@ -18,56 +19,72 @@ public static class DataSeeder
                     PasswordHash = "hashedpassword1",
                     Characters = new List<Character>
                     {
-                        new Character
-                        {
-                            Id = 1,
-                            Name = "Aragorn",
-                            Race = Race.Human, // Fixed to use Race enum
-                            Class = PlayerClass.Ranger,
-                            Background = Background.Noble,
-                            Subclass = "Hunter",
-                            Level = 5,
-                            Strength = 16,
-                            Dexterity = 14,
-                            Constitution = 14,
-                            Intelligence = 12,
-                            Wisdom = 15,
-                            Charisma = 13,
-                            HitPoints = 45,
-                            Speed = 30,
-                            ArmorClass = 16,
-                            Alignment = Alignment.LawfulGood,
-                            Inventory = new List<Item>
+                        // Call the factory for Aragorn
+                        CharacterFactory.Create(
+                            id: 1, name: "Aragorn", race: Race.Human, playerClass: PlayerClass.Ranger,
+                            background: Background.Noble, alignment: Alignment.LawfulGood,
+                            subclass: "Hunter", level: 5, strength: 16, dexterity: 14, constitution: 14,
+                            intelligence: 12, wisdom: 15, charisma: 13, hitPoints: 45, speed: 30,
+                            armorClass: 16, equipmentId: 1,
+                            equipmentItems: new List<Item>
                             {
-                                new Item { Id = 1, Name = "Sword", Description = "A sharp blade", Type = "Weapon", Quantity = 1, Weight = 3, Cost = 50 },
-                                new Item { Id = 2, Name = "Shield", Description = "A sturdy shield", Type = "Armor", Quantity = 1, Weight = 5, Cost = 75 }
-                            }
-                        },
-                        new Character
-                        {
-                            Id = 2,
-                            Name = "Legolas",
-                            Race = Race.Elf, // Fixed to use Race enum
-                            Class = PlayerClass.Ranger,
-                            Background = Background.Soldier,
-                            Subclass = "Archer",
-                            Level = 4,
-                            Strength = 12,
-                            Dexterity = 18,
-                            Constitution = 12,
-                            Intelligence = 14,
-                            Wisdom = 13,
-                            Charisma = 10,
-                            HitPoints = 38,
-                            Speed = 35,
-                            ArmorClass = 15,
-                            Alignment = Alignment.ChaoticGood,
-                            Inventory = new List<Item>
+                                new Item
+                                {
+                                    Id = 1, Name = "Sword", Type = "Weapon", Quantity = 1, Weight = 3, Cost = 50
+                                },
+                                new Item
+                                {
+                                    Id = 2, Name = "Shield", Type = "Armor", Quantity = 1, Weight = 5, Cost = 75
+                                }
+                            },
+                            inventoryId: 1, 
+                            inventoryItems: new List<Item>
                             {
-                                new Item { Id = 3, Name = "Bow", Description = "A longbow", Type = "Weapon", Quantity = 1, Weight = 2, Cost = 100 },
-                                new Item { Id = 4, Name = "Quiver", Description = "A quiver of arrows", Type = "Ammunition", Quantity = 20, Weight = 1, Cost = 10 }
+                                new Item
+                                {
+                                    Id = 3, Name = "Healing Potion", Type = "Consumable", Quantity = 1, Weight = 1,
+                                    Cost = 50
+                                },
+                                new Item
+                                {
+                                    Id = 4, Name = "Map of Middle-Earth", Type = "Miscellaneous", Quantity = 1,
+                                    Weight = 0, Cost = 20
+                                }
                             }
-                        }
+                        ),
+
+                        // Call the factory for Legolas
+                        CharacterFactory.Create(
+                            id: 2, name: "Legolas", race: Race.Elf, playerClass: PlayerClass.Ranger,
+                            background: Background.Soldier, alignment: Alignment.ChaoticGood,
+                            subclass: "Archer", level: 4, strength: 12, dexterity: 18, constitution: 12,
+                            intelligence: 14, wisdom: 13, charisma: 10, hitPoints: 38, speed: 35,
+                            armorClass: 15, equipmentId: 2,
+                            equipmentItems: new List<Item>
+                            {
+                                new Item
+                                {
+                                    Id = 5, Name = "Bow", Type = "Weapon", Quantity = 1, Weight = 2, Cost = 100
+                                },
+                                new Item
+                                {
+                                    Id = 6, Name = "Quiver", Type = "Ammunition", Quantity = 20, Weight = 1, Cost = 10
+                                }
+                            },
+                            inventoryId: 2,
+                            inventoryItems: new List<Item>
+                            {
+                                new Item
+                                {
+                                    Id = 7, Name = "Healing Potion", Type = "Consumable", Quantity = 2, Weight = 1,
+                                    Cost = 50
+                                },
+                                new Item
+                                {
+                                    Id = 8, Name = "Elven Cloak", Type = "Armor", Quantity = 1, Weight = 1, Cost = 150
+                                }
+                            }
+                            )
                     }
                 },
                 new PlayerAccount
@@ -78,56 +95,70 @@ public static class DataSeeder
                     PasswordHash = "hashedpassword2",
                     Characters = new List<Character>
                     {
-                        new Character
-                        {
-                            Id = 3,
-                            Name = "Gimli",
-                            Race = Race.Dwarf, // Fixed to use Race enum
-                            Class = PlayerClass.Fighter,
-                            Background = Background.Soldier,
-                            Subclass = "Champion",
-                            Level = 6,
-                            Strength = 18,
-                            Dexterity = 10,
-                            Constitution = 16,
-                            Intelligence = 10,
-                            Wisdom = 12,
-                            Charisma = 10,
-                            HitPoints = 60,
-                            Speed = 25,
-                            ArmorClass = 18,
-                            Alignment = Alignment.LawfulNeutral,
-                            Inventory = new List<Item>
+                        CharacterFactory.Create(
+                            id: 3, name: "Gimli", race: Race.Dwarf, playerClass: PlayerClass.Fighter,
+                            background: Background.Soldier, alignment: Alignment.LawfulNeutral,
+                            subclass: "Champion", level: 6, strength: 18, dexterity: 10, constitution: 16,
+                            intelligence: 10, wisdom: 12, charisma: 10, hitPoints: 60, speed: 25,
+                            armorClass: 18, equipmentId: 3,
+                            equipmentItems: new List<Item>
                             {
-                                new Item { Id = 5, Name = "Axe", Description = "A battle axe", Type = "Weapon", Quantity = 1, Weight = 4, Cost = 60 },
-                                new Item { Id = 6, Name = "Helmet", Description = "A sturdy helmet", Type = "Armor", Quantity = 1, Weight = 3, Cost = 40 }
-                            }
-                        },
-                        new Character
-                        {
-                            Id = 4,
-                            Name = "Thorin",
-                            Race = Race.Dwarf, // Fixed to use Race enum
-                            Class = PlayerClass.Fighter,
-                            Background = Background.Noble,
-                            Subclass = "Champion",
-                            Level = 5,
-                            Strength = 16,
-                            Dexterity = 12,
-                            Constitution = 14,
-                            Intelligence = 12,
-                            Wisdom = 12,
-                            Charisma = 14,
-                            HitPoints = 50,
-                            Speed = 25,
-                            ArmorClass = 17,
-                            Alignment = Alignment.TrueNeutral,
-                            Inventory = new List<Item>
+                                new Item
+                                {
+                                    Id = 9, Name = "Axe", Type = "Weapon", Quantity = 1, Weight = 4, Cost = 60
+                                },
+                                new Item
+                                {
+                                    Id = 10, Name = "Helmet", Type = "Armor", Quantity = 1, Weight = 3, Cost = 40
+                                }
+                            },
+                            inventoryId: 3,
+                            inventoryItems: new List<Item>
                             {
-                                new Item { Id = 7, Name = "Hammer", Description = "A war hammer", Type = "Weapon", Quantity = 1, Weight = 5, Cost = 70 },
-                                new Item { Id = 8, Name = "Chainmail", Description = "A chainmail armor", Type = "Armor", Quantity = 1, Weight = 10, Cost = 150 }
+                                new Item
+                                {
+                                    Id = 11, Name = "Healing Potion", Type = "Consumable", Quantity = 3, Weight = 1,
+                                    Cost = 50
+                                },
+                                new Item
+                                {
+                                    Id = 12, Name = "Map of Moria", Type = "Miscellaneous", Quantity = 1, Weight = 0,
+                                    Cost = 30
+                                }
                             }
-                        }
+                            ),
+                        CharacterFactory.Create(
+                            id: 4, name: "Thorin Oakenshield", race: Race.Dwarf, playerClass: PlayerClass.Fighter,
+                            background: Background.Noble, alignment: Alignment.TrueNeutral,
+                            subclass: "Champion", level: 5, strength: 16, dexterity: 12, constitution: 14,
+                            intelligence: 12, wisdom: 12, charisma: 14, hitPoints: 50, speed: 25,
+                            armorClass: 18, equipmentId: 4,
+                            equipmentItems: new List<Item>
+                            {
+                                new Item
+                                {
+                                    Id = 13, Name = "Battle Axe", Type = "Weapon", Quantity = 1, Weight = 4, Cost = 70
+                                },
+                                new Item
+                                {
+                                    Id = 14, Name = "Chainmail", Type = "Armor", Quantity = 1, Weight = 5, Cost = 100
+                                }
+                            },
+                            inventoryId: 4,
+                            inventoryItems: new List<Item>
+                            {
+                                new Item
+                                {
+                                    Id = 15, Name = "Healing Potion", Type = "Consumable", Quantity = 2, Weight = 1,
+                                    Cost = 50
+                                },
+                                new Item
+                                {
+                                    Id = 16, Name = "Map of Erebor", Type = "Miscellaneous", Quantity = 1, Weight = 0,
+                                    Cost = 40
+                                }
+                            }
+                            )
                     }
                 },
                 new PlayerAccount
@@ -138,56 +169,71 @@ public static class DataSeeder
                     PasswordHash = "hashedpassword3",
                     Characters = new List<Character>
                     {
-                        new Character
-                        {
-                            Id = 5,
-                            Name = "Gandalf",
-                            Race = Race.Human, // Fixed to use Race enum
-                            Class = PlayerClass.Wizard,
-                            Background = Background.Sage,
-                            Subclass = "Evoker",
-                            Level = 10,
-                            Strength = 10,
-                            Dexterity = 12,
-                            Constitution = 14,
-                            Intelligence = 20,
-                            Wisdom = 18,
-                            Charisma = 16,
-                            HitPoints = 40,
-                            Speed = 30,
-                            ArmorClass = 14,
-                            Alignment = Alignment.LawfulGood,
-                            Inventory = new List<Item>
+                        CharacterFactory.Create(
+                            id: 5, name: "Gandalf the grey", race: Race.Human, playerClass: PlayerClass.Wizard,
+                            background: Background.Sage, alignment: Alignment.LawfulGood,
+                            subclass: "Evoker", level: 10, strength: 10, dexterity: 12, constitution: 14,
+                            intelligence: 20, wisdom: 18, charisma: 16, hitPoints: 40, speed: 30,
+                            armorClass: 14, equipmentId: 5,
+                            equipmentItems: new List<Item>
                             {
-                                new Item { Id = 9, Name = "Staff", Description = "A magical staff", Type = "Weapon", Quantity = 1, Weight = 3, Cost = 200 },
-                                new Item { Id = 10, Name = "Spellbook", Description = "A book of spells", Type = "Miscellaneous", Quantity = 1, Weight = 2, Cost = 300 }
-                            }
-                        },
-                        new Character
-                        {
-                            Id = 6,
-                            Name = "Saruman",
-                            Race = Race.Human, // Fixed to use Race enum
-                            Class = PlayerClass.Wizard,
-                            Background = Background.Sage,
-                            Subclass = "Necromancer",
-                            Level = 9,
-                            Strength = 10,
-                            Dexterity = 12,
-                            Constitution = 14,
-                            Intelligence = 18,
-                            Wisdom = 16,
-                            Charisma = 14,
-                            HitPoints = 38,
-                            Speed = 30,
-                            ArmorClass = 13,
-                            Alignment = Alignment.ChaoticEvil,
-                            Inventory = new List<Item>
+                                new Item
+                                {
+                                    Id = 17, Name = "Staff", Type = "Weapon", Quantity = 1, Weight = 3, Cost = 200
+                                },
+                                new Item
+                                {
+                                    Id = 18, Name = "Spellbook", Type = "Miscellaneous", Quantity = 1, Weight = 2,
+                                    Cost = 300
+                                }
+                            },
+                            inventoryId: 5,
+                            inventoryItems: new List<Item>
                             {
-                                new Item { Id = 11, Name = "Staff", Description = "A dark magical staff", Type = "Weapon", Quantity = 1, Weight = 3, Cost = 250 },
-                                new Item { Id = 12, Name = "Robe", Description = "A dark robe", Type = "Armor", Quantity = 1, Weight = 1, Cost = 100 }
+                                new Item
+                                {
+                                    Id = 19, Name = "Potion of Mana", Type = "Consumable", Quantity = 1, Weight = 1,
+                                    Cost = 100
+                                },
+                                new Item
+                                {
+                                    Id = 20, Name = "Scroll of Lightning Bolt", Type = "Spell", Quantity = 1, Weight = 0,
+                                    Cost = 200
+                                }
                             }
-                        }
+                            ),
+                        CharacterFactory.Create(
+                            id: 6, name: "Sauraman the white", race: Race.Human, playerClass: PlayerClass.Wizard,
+                            background: Background.Sage, alignment: Alignment.ChaoticEvil,
+                            subclass: "Necromancer", level: 9, strength: 10, dexterity: 12, constitution: 14,
+                            intelligence: 18, wisdom: 16, charisma: 14, hitPoints: 38, speed: 30,
+                            armorClass: 13, equipmentId: 6,
+                            equipmentItems: new List<Item>
+                            {
+                                new Item
+                                {
+                                    Id = 21, Name = "Staff", Type = "Weapon", Quantity = 1, Weight = 3, Cost = 250
+                                },
+                                new Item
+                                {
+                                    Id = 22, Name = "Robe", Type = "Armor", Quantity = 1, Weight = 1, Cost = 100
+                                }
+                            },
+                            inventoryId: 6,
+                            inventoryItems: new List<Item>
+                            {
+                                new Item
+                                {
+                                    Id = 23, Name = "Potion of Healing", Type = "Consumable", Quantity = 2, Weight = 1,
+                                    Cost = 50
+                                },
+                                new Item
+                                {
+                                    Id = 24, Name = "Scroll of Fireball", Type = "Spell", Quantity = 1, Weight = 0,
+                                    Cost = 150
+                                }
+                            }
+                            )
                     }
                 }
             };

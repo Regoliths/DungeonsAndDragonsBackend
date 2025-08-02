@@ -36,7 +36,7 @@ public class CharacterController : ControllerBase
     }
 
     [HttpGet("{characterId}")]
-    public ActionResult<Character> GetCharacter(int characterId)
+    public ActionResult<PlayerCharacterDto> GetCharacter(int characterId)
     {
         var character = _characterService.GetCharacter(characterId);
 
@@ -44,6 +44,9 @@ public class CharacterController : ControllerBase
         {
             return NotFound($"Character with ID {characterId} not found.");
         }
+        
+        // Convert to DTO if necessary
+        var characterDto = PlayerCharacterDto.FromCharacter(character);
 
         return Ok(character);
     }

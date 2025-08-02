@@ -4,21 +4,21 @@ using DungeonsAndDragons.Services.Interfaces;
 
 namespace DungeonsAndDragons.Services;
 
-public class InventoryService : IInventoryService
+public class EquipmentService : IEquipmentService
 {
-    private readonly ApplicationDbContext _context;
-
+     private readonly ApplicationDbContext _context;
+    
     private CharacterService _characterService;
     private ItemService _itemService;
 
-    public InventoryService(ApplicationDbContext context)
+    public EquipmentService(ApplicationDbContext context)
     {
         _context = context;
         _characterService = new CharacterService(_context);
         _itemService = new ItemService(_context);
     }
-
-    public Task<Inventory> GetInventoryAsync(int characterId)
+    
+    public Task<Equipment> GetEquipmentAsync(int characterId)
     {
         var character = _characterService.GetCharacter(characterId);
 
@@ -27,10 +27,10 @@ public class InventoryService : IInventoryService
             throw new CharacterNotFoundException(characterId);
         }
 
-        return Task.FromResult(character.Inventory);
+        return Task.FromResult(character.Equipment);
     }
 
-    public Task<Item> GetItemInInventoryAsync(int characterId, int itemId)
+    public Task<Item> GetItemInEquipmentAsync(int characterId, int itemId)
     {
         var character = _characterService.GetCharacter(characterId);
 
@@ -39,7 +39,7 @@ public class InventoryService : IInventoryService
             throw new CharacterNotFoundException(characterId);
         }
 
-        var item = character.Inventory.Items.FirstOrDefault(i => i.Id == itemId);
+        var item = character.Equipment.Items.FirstOrDefault(i => i.Id == itemId);
 
         if (item == null)
         {
@@ -49,7 +49,7 @@ public class InventoryService : IInventoryService
         return Task.FromResult(item);
     }
 
-    public Task<List<Item>> GetItemsInInventoryAsync(int characterId)
+    public Task<List<Item>> GetItemsInEquipmentAsync(int characterId)
     {
         var character = _characterService.GetCharacter(characterId);
         
@@ -58,11 +58,11 @@ public class InventoryService : IInventoryService
             throw new CharacterNotFoundException(characterId);
         }
         
-        var items = character.Inventory.Items;
+        var items = character.Equipment.Items;
         
         if (items == null || !items.Any())
         {
-            throw new Exception("No items found in inventory.");
+            throw new Exception("No items found in equipment.");
         }
         if (items.Count == 0)
         {
@@ -71,7 +71,7 @@ public class InventoryService : IInventoryService
         return Task.FromResult(items.ToList());
     }
 
-    public Task<Item> AddItemToInventoryAsync(int characterId, Item item)
+    public Task<Item> AddItemToEquipmentAsync(int characterId, Item item)
     {
         var character = _characterService.GetCharacter(characterId);
 
@@ -80,13 +80,13 @@ public class InventoryService : IInventoryService
             throw new CharacterNotFoundException(characterId);
         }
 
-        character.Inventory.Items.Add(item);
+        character.Equipment.Items.Add(item);
         _context.SaveChanges();
 
         return Task.FromResult(item);
     }
     
-    public void RemoveItemFromInventoryAsync(int characterId, int itemId)
+    public void RemoveItemFromEquipmentAsync(int characterId, int itemId)
     {
         var character = _characterService.GetCharacter(characterId);
         if (character == null)
@@ -94,17 +94,17 @@ public class InventoryService : IInventoryService
             throw new CharacterNotFoundException(characterId);
         }
 
-        var item = character.Inventory.Items.FirstOrDefault(i => i.Id == itemId);
+        var item = character.Equipment.Items.FirstOrDefault(i => i.Id == itemId);
         if (item == null)
         {
             throw new ItemNotFoundException(itemId);
         }
 
-        character.Inventory.Items.Remove(item);
+        character.Equipment.Items.Remove(item);
         _context.SaveChanges();
     }
     
-    public Task<Item> UpdateItemInInventoryAsync(int characterId, int itemId, UpdateItemDto updatedItem)
+    public Task<Item> UpdateItemInEquipmentAsync(int characterId, int itemId, UpdateItemDto updatedItem)
     {
         var character = _characterService.GetCharacter(characterId);
         if (character == null)
@@ -119,7 +119,7 @@ public class InventoryService : IInventoryService
         return Task.FromResult(item.Result);
     }
     
-    public Task<Item> MoveItemToEquipmentAsync(int characterId, int itemId)
+    public Task<Item> MoveItemToInventoryAsync(int characterId, int itemId)
     {
         var character = _characterService.GetCharacter(characterId);
         if (character == null)
@@ -127,18 +127,17 @@ public class InventoryService : IInventoryService
             throw new CharacterNotFoundException(characterId);
         }
 
-        var item = character.Inventory.Items.FirstOrDefault(i => i.Id == itemId);
+        var item = character.Equipment.Items.FirstOrDefault(i => i.Id == itemId);
         if (item == null)
         {
             throw new ItemNotFoundException(itemId);
         }
 
-        character.Inventory.Items.Remove(item);
-        character.Equipment.Items.Add(item);
+        character.Equipment.Items.Remove(item);
+        character.Inventory.Items.Add(item);
         
         _context.SaveChanges();
 
         return Task.FromResult(item);
     }
-  
 }
