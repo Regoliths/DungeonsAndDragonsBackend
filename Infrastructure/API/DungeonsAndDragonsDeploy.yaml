@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dndackendapideployment
+  namespace: dungeonsanddragons
+  labels:
+    app: dnd
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dndackendapi
+  template:
+    metadata:
+      name: dndackendapi
+      labels:
+        app: dndackendapi
+    spec:
+      containers:
+        - name: dndackendapi
+          image: ghcr.io/regoliths/dungeonsanddragonsbackend
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+      restartPolicy: Always
+      
