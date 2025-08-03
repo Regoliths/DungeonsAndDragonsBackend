@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dndackendapideployment
+  name: dndbackendapideployment
   namespace: dungeonsanddragons
   labels:
     app: dnd
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: dndackendapi
+      app: dndbackendapi
   template:
     metadata:
-      name: dndackendapi
+      name: dndbackendapi
       labels:
-        app: dndackendapi
+        app: dndbackendapi
     spec:
       containers:
-        - name: dndackendapi
+        - name: dndbackendapi
           image: ghcr.io/regoliths/dungeonsanddragonsbackend:master
           imagePullPolicy: Always
           ports:
