@@ -31,30 +31,3 @@ public class Monster
     public ICollection<Action> Actions { get; set; } = new List<Action>(); // Actions the monster can perform
     public ICollection<LegendaryAction> LegendaryActions { get; set; } = new List<LegendaryAction>(); // Legendary actions
 }
-
-public class SpecialAbility
-{
-    public string Name { get; set; } = string.Empty; // Name of the special ability
-    public string Description { get; set; } = string.Empty; // Description of the special ability
-}
-
-public class Action
-{
-    public string Name { get; set; } = string.Empty; // Name of the action
-    public string Description { get; set; } = string.Empty; // Description of the action
-    public int AttackBonus { get; set; } // Attack bonus for the action
-    public ICollection<Damage> Damage { get; set; } = new List<Damage>(); // Damage dealt by the action
-}
-
-public class LegendaryAction
-{
-    public string Name { get; set; } = string.Empty; // Name of the legendary action
-    public string Description { get; set; } = string.Empty; // Description of the legendary action
-    public ICollection<Damage> Damage { get; set; } = new List<Damage>(); // Damage dealt by the legendary action
-}
-
-public class Damage
-{
-    public string DamageType { get; set; } = string.Empty; // Type of damage (e.g., bludgeoning, acid)
-    public string DamageDice { get; set; } = string.Empty; // Dice roll for damage (e.g., 2d6+5)
-}

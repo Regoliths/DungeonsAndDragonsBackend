@@ -1,5 +1,6 @@
 using DungeonsAndDragons.Factory;
 using DungeonsAndDragons.Models;
+using Action = DungeonsAndDragons.Models.Action;
 
 namespace DungeonsAndDragons.Seeding;
 
@@ -50,6 +51,27 @@ public static class DataSeeder
                                     Id = 4, Name = "Map of Middle-Earth", Type = "Miscellaneous", Quantity = 1,
                                     Weight = 0, Cost = 20
                                 }
+                            },
+                            actions: new List<Action>
+                            {
+                                new Action
+                                {
+                                    Name = "Melee Attack", Description = "Perform a melee attack with a sword.",
+                                    Range = 5, AttackBonus = 5,
+                                    Damage = new Damage(1, 8, "slashing")
+                                },
+                                new Action
+                                {
+                                    Name = "Dodge", Description = "Avoid incoming attacks.",
+                                    Range = 0, AttackBonus = 0,
+                                    Damage = new Damage(0, 0, "none")
+                                },
+                                new Action
+                                {
+                                    Name = "Dash", Description = "Move quickly to avoid danger.",
+                                    Range = 0, AttackBonus = 0,
+                                    Damage = new Damage(0, 0, "none")
+                                }
                             }
                         ),
 
@@ -82,6 +104,21 @@ public static class DataSeeder
                                 new Item
                                 {
                                     Id = 8, Name = "Elven Cloak", Type = "Armor", Quantity = 1, Weight = 1, Cost = 150
+                                }
+                            },
+                            actions: new List<Action>
+                            {
+                                new Action
+                                {
+                                    Name = "Ranged Attack", Description = "Perform a ranged attack with a bow.",
+                                    Range = 60, AttackBonus = 6,
+                                    Damage = new Damage(1, 8, "piercing")
+                                },
+                                new Action
+                                {
+                                    Name = "Hide", Description = "Hide from enemies to avoid detection.",
+                                    Range = 0, AttackBonus = 0,
+                                    Damage = new Damage(0, 0, "none")
                                 }
                             }
                             )
@@ -125,6 +162,21 @@ public static class DataSeeder
                                     Id = 12, Name = "Map of Moria", Type = "Miscellaneous", Quantity = 1, Weight = 0,
                                     Cost = 30
                                 }
+                            },
+                            actions: new List<Action>
+                            {
+                                new Action
+                                {
+                                    Name = "Melee Attack", Description = "Perform a melee attack with an axe.",
+                                    Range = 5, AttackBonus = 6,
+                                    Damage = new Damage(1, 10, "slashing")
+                                },
+                                new Action
+                                {
+                                    Name = "Hide", Description = "Hide from enemies to avoid detection.",
+                                    Range = 0, AttackBonus = 0,
+                                    Damage = new Damage(0, 0, "none")
+                                }
                             }
                             ),
                         CharacterFactory.Create(
@@ -156,6 +208,21 @@ public static class DataSeeder
                                 {
                                     Id = 16, Name = "Map of Erebor", Type = "Miscellaneous", Quantity = 1, Weight = 0,
                                     Cost = 40
+                                }
+                            },
+                            actions: new List<Action>
+                            {
+                                new Action
+                                {
+                                    Name = "Melee Attack",Description = "Perform a melee attack with a weapon.",
+                                    Range = 5, AttackBonus = 5,
+                                    Damage = new Damage(1, 8, "slashing"),
+                                },
+                                new Action
+                                {
+                                    Name = "Defend", Description = "Take a defensive stance to reduce damage.",
+                                    Range = 0, AttackBonus = 0,
+                                    Damage = new Damage(0, 0, "none")
                                 }
                             }
                             )
@@ -200,6 +267,21 @@ public static class DataSeeder
                                     Id = 20, Name = "Scroll of Lightning Bolt", Type = "Spell", Quantity = 1, Weight = 0,
                                     Cost = 200
                                 }
+                            },
+                            actions: new List<Action>
+                            {
+                                new Action()
+                                {
+                                    Name = "Cast Fireball", Description = "Cast a powerful fireball spell.",
+                                    Range = 150, AttackBonus = 8,
+                                    Damage = new Damage(8, 6, "fire")
+                                },
+                                new Action()
+                                {
+                                    Name = "Cast Shield", Description = "Create a magical shield to protect against attacks.",
+                                    Range = 0, AttackBonus = 0,
+                                    Damage = new Damage(0, 0, "none")
+                                }
                             }
                             ),
                         CharacterFactory.Create(
@@ -231,6 +313,21 @@ public static class DataSeeder
                                 {
                                     Id = 24, Name = "Scroll of Fireball", Type = "Spell", Quantity = 1, Weight = 0,
                                     Cost = 150
+                                }
+                            },
+                            actions: new List<Action>
+                            {
+                                new Action()
+                                {
+                                    Name = "Cast Lightning Bolt", Description = "Cast a powerful lightning bolt spell.",
+                                    Range = 100, AttackBonus = 7,
+                                    Damage = new Damage(6, 6, "lightning")
+                                },
+                                new Action()
+                                {
+                                    Name = "Summon Undead", Description = "Summon undead minions to fight for you.",
+                                    Range = 30, AttackBonus = 0,
+                                    Damage = new Damage(0, 0, "none")
                                 }
                             }
                             )

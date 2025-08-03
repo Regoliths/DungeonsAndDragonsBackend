@@ -23,7 +23,7 @@ public class CharacterController : ControllerBase
     }
     
     [HttpGet]
-    public ActionResult<IEnumerable<Character>> GetAllCharacters()
+    public ActionResult<IEnumerable<CharacterDto>> GetAllCharacters()
     {
         var characters = _characterService.GetAllCharacters();
 
@@ -36,7 +36,7 @@ public class CharacterController : ControllerBase
     }
 
     [HttpGet("{characterId}")]
-    public ActionResult<PlayerCharacterDto> GetCharacter(int characterId)
+    public ActionResult<CharacterDto> GetCharacter(int characterId)
     {
         var character = _characterService.GetCharacter(characterId);
 
@@ -46,13 +46,13 @@ public class CharacterController : ControllerBase
         }
         
         // Convert to DTO if necessary
-        var characterDto = PlayerCharacterDto.FromCharacter(character);
+        var characterDto = CharacterDto.FromCharacter(character);
 
         return Ok(character);
     }
 
     [HttpPost]
-    public ActionResult<Character> CreateCharacter([FromBody] PlayerCharacterDto characterDto)
+    public ActionResult<Character> CreateCharacter([FromBody] CharacterDto characterDto)
     {
         var character = _characterService.CreateCharacter(characterDto); 
 
@@ -60,7 +60,7 @@ public class CharacterController : ControllerBase
     }
 
     [HttpPut("{characterId}")]
-    public ActionResult UpdateCharacter(int characterId, [FromBody] PlayerCharacterDto characterDto)
+    public ActionResult UpdateCharacter(int characterId, [FromBody] CharacterDto characterDto)
     {
         var character = _characterService.GetCharacter(characterId);
 
@@ -77,16 +77,15 @@ public class CharacterController : ControllerBase
     [HttpDelete("{characterId}")]
     public ActionResult DeleteCharacter(int characterId)
     {
-        var character = _context.PlayerCharacters.FirstOrDefault(c => c.Id == characterId);
+        var character = _characterService.GetCharacter(characterId);
 
         if (character == null)
         {
             return NotFound($"Character with ID {characterId} not found.");
         }
 
-        _context.PlayerCharacters.Remove(character);
-        _context.SaveChanges();
-
+        _characterService.DeleteCharacter(characterId);
+        
         return NoContent();
     }
 }

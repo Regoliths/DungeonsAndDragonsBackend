@@ -1,4 +1,5 @@
 ﻿using DungeonsAndDragons.Models;
+using Action = DungeonsAndDragons.Models.Action;
 
 namespace DungeonsAndDragons.Factory;
 
@@ -10,7 +11,7 @@ public static class CharacterFactory
         Background background, Alignment alignment, int level,
         int strength, int dexterity, int constitution, int intelligence,
         int wisdom, int charisma, int hitPoints, int speed, int armorClass,
-        int equipmentId, List<Item> equipmentItems, int inventoryId, List<Item> inventoryItems,
+        int equipmentId, List<Item> equipmentItems, int inventoryId, List<Item> inventoryItems, List<Action> actions,
         string? subclass = "", int? hitDice = 0, string? notes = "", PlayerAccount? playerAccount = null
         )
     {
@@ -32,12 +33,14 @@ public static class CharacterFactory
             Wisdom = wisdom,
             Charisma = charisma,
             HitPoints = hitPoints,
+            MaxHitPoints = hitPoints, // Assuming maxHitPoints is the same as HitPoints for simplicity
             HitDice = hitDice,
             Speed = speed,
             ArmorClass = armorClass,
             Notes = notes,
             PlayerAccount = playerAccount,
             Initiative = 10 + dexterity, // Initiative is calculated based on Dexterity
+            Actions = actions ?? new List<Action>() // Initialize with an empty list if null
         };
 
         // 2. Create the child object, passing the parent reference.
@@ -56,6 +59,7 @@ public static class CharacterFactory
             Items = inventoryItems,
             TotalWeight = inventoryItems.Sum(i => i.Weight * i.Quantity) // Example of logic
         };
+        
 
         // 3. Assign the child to the parent.
         character.Equipment = equipment;

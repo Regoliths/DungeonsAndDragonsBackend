@@ -1,6 +1,7 @@
 using DungeonsAndDragons.Models;
 using DungeonsAndDragons.Models.DTO;
 using Microsoft.EntityFrameworkCore;
+using Action = DungeonsAndDragons.Models.Action;
 
 namespace DungeonsAndDragons.Services;
 
@@ -17,30 +18,30 @@ public class CharacterService
         _context = context;
         _alignmentMapping = new Dictionary<int, Alignment>
         {
-            { 1, Alignment.LawfulGood },
-            { 2, Alignment.NeutralGood },
-            { 3, Alignment.ChaoticGood },
-            { 4, Alignment.LawfulNeutral },
-            { 5, Alignment.TrueNeutral },
-            { 6, Alignment.ChaoticNeutral },
-            { 7, Alignment.LawfulEvil },
-            { 8, Alignment.NeutralEvil },
-            { 9, Alignment.ChaoticEvil }
+            { 0, Alignment.LawfulGood },
+            { 1, Alignment.NeutralGood },
+            { 2, Alignment.ChaoticGood },
+            { 3, Alignment.LawfulNeutral },
+            { 4, Alignment.TrueNeutral },
+            { 5, Alignment.ChaoticNeutral },
+            { 6, Alignment.LawfulEvil },
+            { 7, Alignment.NeutralEvil },
+            { 8, Alignment.ChaoticEvil }
         };
         _classMapping = new Dictionary<int, PlayerClass>
         {
-            { 1, PlayerClass.Barbarian },
-            { 2, PlayerClass.Bard },
-            { 3, PlayerClass.Cleric },
-            { 4, PlayerClass.Druid },
-            { 5, PlayerClass.Fighter },
-            { 6, PlayerClass.Monk },
-            { 7, PlayerClass.Paladin },
-            { 8, PlayerClass.Ranger },
-            { 9, PlayerClass.Rogue },
-            { 10, PlayerClass.Sorcerer },
-            { 11, PlayerClass.Warlock },
-            { 12, PlayerClass.Wizard }
+            { 0, PlayerClass.Barbarian },
+            { 1, PlayerClass.Bard },
+            { 2, PlayerClass.Cleric },
+            { 3, PlayerClass.Druid },
+            { 4, PlayerClass.Fighter },
+            { 5, PlayerClass.Monk },
+            { 6, PlayerClass.Paladin },
+            { 7, PlayerClass.Ranger },
+            { 8, PlayerClass.Rogue },
+            { 9, PlayerClass.Sorcerer },
+            { 10, PlayerClass.Warlock },
+            { 11, PlayerClass.Wizard }
         };
         _raceMapping = new Dictionary<int, Race>
         {
@@ -53,29 +54,30 @@ public class CharacterService
             { 6, Race.HalfElf },
             { 7, Race.HalfOrc },
             { 8, Race.Tiefling },
-            { 9, Race.Genasi },
-            { 10,Race.Goliath },
-            {  11, Race.Aasimar },
-            {  12, Race.Firbolg }
+            { 9, Race.Aasimar },
+            { 10,Race.Firbolg },
+            {  11, Race.Genasi },
+            {  12, Race.Goliath }
         };
         _backgroundMapping = new Dictionary<int, Background>
         {
-            { 1, Background.Acolyte },
-            { 2, Background.Charlatan },
-            { 3, Background.Criminal },
-            { 4, Background.Entertainer },
-            { 5, Background.FolkHero },
-            { 6, Background.GuildArtisan },
-            { 7, Background.Hermit },
-            { 8, Background.Noble },
-            { 9, Background.Outlander },
-            { 10, Background.Sage },
-            { 11, Background.Soldier },
-            { 12, Background.Urchin }
+            { 0, Background.Acolyte },
+            { 1, Background.Criminal },
+            { 2, Background.FolkHero },
+            { 4, Background.Noble },
+            { 5, Background.Sage },
+            { 6, Background.Soldier },
+            { 7, Background.Charlatan },
+            { 8, Background.Entertainer },
+            { 9, Background.GuildArtisan },
+            { 10, Background.Hermit },
+            { 11, Background.Outlander },
+            { 12, Background.Sailor },
+            { 13, Background.Urchin }
         };
     }
 
-    public Character CreateCharacter(PlayerCharacterDto characterDto)
+    public Character CreateCharacter(CharacterDto characterDto)
     {
 
         var character = new Character
@@ -93,12 +95,26 @@ public class CharacterService
             Wisdom = characterDto.Wisdom,
             Charisma = characterDto.Charisma,
             HitPoints = characterDto.HitPoints,
+            MaxHitPoints = characterDto.MaxHitPoints,
             HitDice = HitDieSize(_classMapping.ContainsKey(characterDto.Class) ? _classMapping[characterDto.Class] : PlayerClass.Barbarian),
             ArmorClass = characterDto.ArmorClass,
             Speed = characterDto.Speed,
             Initiative = 10 + characterDto.Dexterity, // Initiative is calculated based on Dexterity
             Notes = characterDto.Notes
         };
+        character.Equipment = new Equipment
+        {
+            CharacterId = character.Id,
+            Items = new List<Item>(),
+            TotalWeight = 0
+        };
+        character.Inventory = new Inventory
+        {
+            CharacterId = character.Id,
+            Items = new List<Item>(),
+            TotalWeight = 0
+        };
+        character.Actions = new List<Action>();
 
         _context.PlayerCharacters.Add(character);
         _context.SaveChanges();
@@ -106,7 +122,7 @@ public class CharacterService
         return character;
     }
 
-    public void UpdateCharacter(PlayerCharacterDto characterDto, Character character)
+    public void UpdateCharacter(CharacterDto characterDto, Character character)
     {
         
         character.Name = characterDto.Name;
@@ -136,6 +152,7 @@ public class CharacterService
         var character = _context.PlayerCharacters
             .Include(c => c.Inventory).ThenInclude(i => i.Items)
             .Include(c => c.Equipment).ThenInclude(i => i.Items)
+            .Include(c => c.Actions)
             .FirstOrDefault(c => c.Id == characterId);
 
         return character;
@@ -145,6 +162,17 @@ public class CharacterService
     {
         return _context.PlayerCharacters.ToList();
     }
+    
+    public void DeleteCharacter(int characterId)
+    {
+        var character = _context.PlayerCharacters.Find(characterId);
+        if (character != null)
+        {
+            _context.PlayerCharacters.Remove(character);
+            _context.SaveChanges();
+        }
+    }
+    
     
     private int HitDieSize(PlayerClass playerClass)
     {

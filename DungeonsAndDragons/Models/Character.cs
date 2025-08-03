@@ -17,6 +17,7 @@ public class Character
     public int Wisdom { get; set; }
     public int Charisma { get; set; }
     public int HitPoints { get; set; }
+    public int MaxHitPoints { get; set; } // Maximum hit points, can be different from current hit points
     public int? HitDice { get; set; }
     public int Speed { get; set; } = 30; // Default speed for a human is 30 feet
     public int Initiative { get; set; }
@@ -24,8 +25,9 @@ public class Character
     public string? Notes { get; set; } = string.Empty; 
     public Alignment Alignment { get; set; }
     public PlayerAccount? PlayerAccount { get; set; }
-    //public ICollection<Proficiency> Proficiencies { get; set; } = new List<Proficiency>(); // Proficiencies of the monster
+    public int PlayerAccountId { get; set; } // Foreign key to PlayerAccount
     public Equipment Equipment { get; set; }
     public Inventory Inventory { get; set; }
+    public ICollection<Action> Actions { get; set; } = new List<Action>();
 }
 
