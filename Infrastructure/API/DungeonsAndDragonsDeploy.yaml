@@ -21,7 +21,7 @@ spec:
           image: ghcr.io/regoliths/dungeonsanddragonsbackend:master
           imagePullPolicy: Always
           ports:
-            - containerPort: 8000
+            - containerPort: 80
               protocol: TCP
           resources:
             requests:
