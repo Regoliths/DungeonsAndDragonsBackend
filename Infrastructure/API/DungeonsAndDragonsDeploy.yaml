@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: dndackendapi
-          image: ghcr.io/regoliths/dungeonsanddragonsbackend
+          image: ghcr.io/regoliths/dungeonsanddragonsbackend:master
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
