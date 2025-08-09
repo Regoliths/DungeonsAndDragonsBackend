@@ -1,3 +1,5 @@
+using DungeonsAndDragons.Models.DTO;
+
 namespace DungeonsAndDragons.Models;
 
 public class Item
@@ -9,4 +11,16 @@ public class Item
     public int Quantity { get; set; } // Number of items
     public int Weight { get; set; } // Weight of the item
     public int Cost { get; set; } // Cost of the item in gold pieces
+    
+    public Item() { }
+    public Item(ItemDto itemDto)
+    {
+        Id = itemDto.Id;
+        Name = itemDto.Name;
+        Description = itemDto.Description;
+        Type = itemDto.Type;
+        Quantity = itemDto.Quantity;
+        Weight = itemDto.Weight;
+        Cost = itemDto.Cost;
+    }
 }

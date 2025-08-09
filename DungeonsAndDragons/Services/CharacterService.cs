@@ -142,7 +142,52 @@ public class CharacterService
         character.Initiative = 10 + characterDto.Dexterity; // Initiative is calculated based on Dexterity
         character.ArmorClass = characterDto.ArmorClass;
         character.Alignment = _alignmentMapping.ContainsKey(characterDto.Alignment) ? _alignmentMapping[characterDto.Alignment] :character.Alignment;
+        character.Notes = characterDto.Notes;
+        character.MaxHitPoints = characterDto.MaxHitPoints;
+        character.Equipment.TotalWeight = characterDto.Equipment?.TotalWeight ?? 0;
+        character.Inventory.TotalWeight = characterDto.Inventory?.TotalWeight ?? 0;
+        
+        if (characterDto.Equipment?.Items != null)
+        {
+            var itemIds = characterDto.Equipment.Items.Where(i => i.Id != 0).Select(i => i.Id).ToList();
+            var existingItems = _context.Items.Where(i => itemIds.Contains(i.Id)).ToList();
 
+            character.Equipment.Items = characterDto.Equipment.Items.Select(i =>
+            {
+                if (i.Id == 0 || !existingItems.Any(ei => ei.Id == i.Id))
+                {
+                    var newItem = new Item(i);
+                    _context.Items.Add(newItem);
+                    return newItem;
+                }
+                else
+                {
+                    return existingItems.First(ei => ei.Id == i.Id);
+                }
+            }).ToList();
+        }
+
+        if (characterDto.Inventory?.Items != null)
+        {
+            var itemIds = characterDto.Inventory.Items.Where(i => i.Id != 0).Select(i => i.Id).ToList();
+            var existingItems = _context.Items.Where(i => itemIds.Contains(i.Id)).ToList();
+
+            character.Inventory.Items = characterDto.Inventory.Items.Select(i =>
+            {
+                if (i.Id == 0 || !existingItems.Any(ei => ei.Id == i.Id))
+                {
+                    var newItem = new Item(i);
+                    _context.Items.Add(newItem);
+                    return newItem;
+                }
+                else
+                {
+                    return existingItems.First(ei => ei.Id == i.Id);
+                }
+            }).ToList();
+        }
+        
+        _context.PlayerCharacters.Update(character);
         _context.SaveChanges();
 
     } 
