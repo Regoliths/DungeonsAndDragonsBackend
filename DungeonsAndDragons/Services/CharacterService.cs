@@ -45,19 +45,15 @@ public class CharacterService
         };
         _raceMapping = new Dictionary<int, Race>
         {
-            { 0, Race.Human },
-            { 1, Race.Elf },
-            { 2, Race.Dwarf },
-            { 3, Race.Halfling },
-            { 4, Race.Dragonborn },
-            { 5, Race.Gnome },
-            { 6, Race.HalfElf },
-            { 7, Race.HalfOrc },
+            { 0, Race.Dragonborn },
+            { 1, Race.Dwarf },
+            { 2, Race.Elf },
+            { 3, Race.Gnome },
+            { 4, Race.HalfOrc },
+            { 5, Race.HalfOrc },
+            { 6, Race.Halfling },
+            { 7, Race.Human },
             { 8, Race.Tiefling },
-            { 9, Race.Aasimar },
-            { 10,Race.Firbolg },
-            {  11, Race.Genasi },
-            {  12, Race.Goliath }
         };
         _backgroundMapping = new Dictionary<int, Background>
         {

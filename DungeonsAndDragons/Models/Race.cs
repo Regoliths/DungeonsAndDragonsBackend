@@ -2,17 +2,13 @@
 
 public enum Race
 {
-    Human,
-    Elf,
-    Dwarf,
-    Halfling,
     Dragonborn,
+    Dwarf,
+    Elf,
     Gnome,
     HalfElf,
     HalfOrc,
+    Halfling,
+    Human,
     Tiefling,
-    Aasimar,
-    Firbolg,
-    Genasi,
-    Goliath,
 }
