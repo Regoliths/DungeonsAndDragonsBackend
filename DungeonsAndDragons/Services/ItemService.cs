@@ -57,6 +57,26 @@ public class ItemService : IItemService
         {
             item.Cost = updateDto.Cost.Value;
         }
+        if (updateDto.DamageDice != null)
+        {
+            item.DamageDice = updateDto.DamageDice;
+        }
+        if (updateDto.DamageType != null)
+        {
+            item.DamageType = updateDto.DamageType;
+        }
+        if (updateDto.ArmorClass.HasValue)
+        {
+            item.ArmorClass = updateDto.ArmorClass;
+        }
+        if (updateDto.AcBonus.HasValue)
+        {
+            item.AcBonus = updateDto.AcBonus;
+        }
+        if (updateDto.ArmorType != null)
+        {
+            item.ArmorType = updateDto.ArmorType;
+        }
 
         await _context.SaveChangesAsync();
 

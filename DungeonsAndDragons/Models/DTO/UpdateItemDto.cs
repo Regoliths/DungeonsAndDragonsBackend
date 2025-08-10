@@ -9,4 +9,9 @@ public class UpdateItemDto
     public int? Weight { get; set; }
     public int? Quantity { get; set; }
     public int? Cost { get; set; }
+    public string? DamageDice { get; set; }
+    public string? DamageType { get; set; }
+    public int? ArmorClass { get; set; }
+    public int? AcBonus { get; set; }
+    public string? ArmorType { get; set; }
 }
