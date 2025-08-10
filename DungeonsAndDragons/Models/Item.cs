@@ -11,7 +11,12 @@ public class Item
     public int Quantity { get; set; } // Number of items
     public int Weight { get; set; } // Weight of the item
     public int Cost { get; set; } // Cost of the item in gold pieces
-    
+    public string? DamageDice { get; set; } // e.g., "1d6"
+    public string? DamageType { get; set; } // e.g., "slashing"
+    public int? ArmorClass { get; set; } // e.g., 15
+    public int? AcBonus { get; set; } // e.g., +1
+    public string? ArmorType { get; set; } // e.g., "light", "medium", "heavy"
+
     public Item() { }
     public Item(ItemDto itemDto)
     {
@@ -22,5 +27,10 @@ public class Item
         Quantity = itemDto.Quantity;
         Weight = itemDto.Weight;
         Cost = itemDto.Cost;
+        DamageDice = itemDto.DamageDice;
+        DamageType = itemDto.DamageType;
+        ArmorClass = itemDto.ArmorClass;
+        AcBonus = itemDto.AcBonus;
+        ArmorType = itemDto.ArmorType;
     }
 }

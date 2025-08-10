@@ -145,8 +145,10 @@ public class CharacterService
         
         if (characterDto.Equipment?.Items != null)
         {
-            var itemIds = characterDto.Equipment.Items.Where(i => i.Id != 0).Select(i => i.Id).ToList();
-            var existingItems = _context.Items.Where(i => itemIds.Contains(i.Id)).ToList();
+            // Track current item IDs before update
+            var previousEquipmentItemIds = character.Equipment.Items.Select(i => i.Id).ToList();
+            var newEquipmentItemIds = characterDto.Equipment.Items.Where(i => i.Id != 0).Select(i => i.Id).ToList();
+            var existingItems = _context.Items.Where(i => newEquipmentItemIds.Contains(i.Id)).ToList();
 
             character.Equipment.Items = characterDto.Equipment.Items.Select(i =>
             {
@@ -161,12 +163,42 @@ public class CharacterService
                     return existingItems.First(ei => ei.Id == i.Id);
                 }
             }).ToList();
+
+            // Remove items that were in Equipment but are no longer present
+            var updatedEquipmentItemIds = character.Equipment.Items.Select(i => i.Id).ToList();
+            var removedEquipmentItemIds = previousEquipmentItemIds.Except(updatedEquipmentItemIds).ToList();
+            var removedEquipmentItems = _context.Items.Where(i => removedEquipmentItemIds.Contains(i.Id)).ToList();
+            foreach (var removedItem in removedEquipmentItems)
+            {
+                _context.Items.Remove(removedItem);
+            }
+
+            // Recalculate ArmorClass based on equipped items
+            int baseAC = 10 + (character.Dexterity - 10) / 2; // Default base AC (can be adjusted per system)
+            int? armorAC = character.Equipment.Items.Where(i => i.ArmorClass.HasValue).Max(i => (int?)i.ArmorClass);
+            int acBonus = character.Equipment.Items.Where(i => i.AcBonus.HasValue).Sum(i => i.AcBonus ?? 0);
+            int? shieldAC = character.Equipment.Items.Where(i => i.Name == "Shield").Sum(i => i.ArmorClass ?? 0);
+            if (armorAC.HasValue)
+            {
+                character.ArmorClass = armorAC.Value + acBonus;
+            }
+            else
+            {
+                character.ArmorClass = baseAC + acBonus;
+            }
+
+            if (shieldAC.HasValue)
+            {
+                character.ArmorClass += shieldAC.Value + acBonus;
+            }
         }
 
         if (characterDto.Inventory?.Items != null)
         {
-            var itemIds = characterDto.Inventory.Items.Where(i => i.Id != 0).Select(i => i.Id).ToList();
-            var existingItems = _context.Items.Where(i => itemIds.Contains(i.Id)).ToList();
+            // Track current item IDs before update
+            var previousInventoryItemIds = character.Inventory.Items.Select(i => i.Id).ToList();
+            var newInventoryItemIds = characterDto.Inventory.Items.Where(i => i.Id != 0).Select(i => i.Id).ToList();
+            var existingItems = _context.Items.Where(i => newInventoryItemIds.Contains(i.Id)).ToList();
 
             character.Inventory.Items = characterDto.Inventory.Items.Select(i =>
             {
@@ -181,6 +213,15 @@ public class CharacterService
                     return existingItems.First(ei => ei.Id == i.Id);
                 }
             }).ToList();
+
+            // Remove items that were in Inventory but are no longer present
+            var updatedInventoryItemIds = character.Inventory.Items.Select(i => i.Id).ToList();
+            var removedInventoryItemIds = previousInventoryItemIds.Except(updatedInventoryItemIds).ToList();
+            var removedInventoryItems = _context.Items.Where(i => removedInventoryItemIds.Contains(i.Id)).ToList();
+            foreach (var removedItem in removedInventoryItems)
+            {
+                _context.Items.Remove(removedItem);
+            }
         }
         
         _context.PlayerCharacters.Update(character);
