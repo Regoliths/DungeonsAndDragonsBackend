@@ -38,7 +38,7 @@ public static class CharacterFactory
             Speed = speed,
             ArmorClass = 10, // Example of logic for Armor Class
             Notes = notes,
-            PlayerAccount = playerAccount,
+            PlayerAccount = playerAccount ?? null,
             Initiative = 10 + dexterity, // Initiative is calculated based on Dexterity
             Actions = actions ?? new List<Action>() // Initialize with an empty list if null
         };
@@ -74,10 +74,28 @@ public static class CharacterFactory
     
     private static int CalculateArmorClass(Character character)
     {
-        // Example logic to calculate Armor Class based on Dexterity and equipment
-        return (int)(10 + CalculateDexterityModifier(character.Dexterity) + character.Equipment.Items
-            .Where(i => i.Type == "Armor")
-            .Sum(i => i.ArmorClass))!;
+        int baseAc = 10; // Base AC for an unarmored character
+        int dexModifier = CalculateDexterityModifier(character.Dexterity);
+
+        // Find the primary armor worn by the character (not a shield)
+        var wornArmor = character.Equipment.Items
+            .OfType<Armor>()
+            .Max(a => a.ArmorClass);
+            
+            // Total AC starts with base (from armor or 10) + dex modifier
+            int totalAc = Math.Max(wornArmor, 10 + dexModifier); // Ensure AC is at least 10
+
+            // Check if a shield is equipped and add its bonus
+            var shield = character.Equipment.Items
+                .OfType<Armor>()
+                .FirstOrDefault(a => a.Name != "Shield") ?? new Armor();
+
+            if (shield != null)
+            {
+                totalAc += shield.ArmorClass; // Shields provide a direct bonus, stored in BaseAC
+            }
+
+            return totalAc;
     }
     
     private static int CalculateDexterityModifier(int dexterity)

@@ -174,13 +174,19 @@ public class CharacterService
             }
 
             // Recalculate ArmorClass based on equipped items
-            int baseAC = 10 + (character.Dexterity - 10) / 2; // Default base AC (can be adjusted per system)
-            int? armorAC = character.Equipment.Items.Where(i => i.ArmorClass.HasValue).Max(i => (int?)i.ArmorClass);
-            int acBonus = character.Equipment.Items.Where(i => i.AcBonus.HasValue).Sum(i => i.AcBonus ?? 0);
-            int? shieldAC = character.Equipment.Items.Where(i => i.Name == "Shield").Sum(i => i.ArmorClass ?? 0);
-            if (armorAC.HasValue)
+            int baseAC = 10 + (character.Dexterity - 10) / 2; 
+            int armorAc= character.Equipment.Items 
+                .OfType<Armor>() 
+                .Max(armor => armor.ArmorClass);       
+            int acBonus = character.Equipment.Items
+                .OfType<Armor>() // Filters and casts to Armor type
+                .Sum(armor => armor.AcBonus);
+            int? shieldAC = character.Equipment.Items
+                .OfType<Armor>() // Filters and casts to Armor type
+                .FirstOrDefault(armor => armor.Name.Equals("Shield", StringComparison.OrdinalIgnoreCase))?.ArmorClass ?? 0;            
+            if (armorAc > 0)
             {
-                character.ArmorClass = armorAC.Value + acBonus;
+                character.ArmorClass = armorAc + acBonus;
             }
             else
             {
@@ -236,6 +242,14 @@ public class CharacterService
             .Include(c => c.Equipment).ThenInclude(i => i.Items)
             .Include(c => c.Actions)
             .FirstOrDefault(c => c.Id == characterId);
+        
+        //check chracter equipement and inventory itemm types to ensure they are correctly cast as Item, Armor, Weapon, etc.
+        if (character != null)
+        {
+            character.Inventory.Items = character.Inventory.Items.Select(i => i as Item).ToList();
+            character.Equipment.Items = character.Equipment.Items.Select(i => i as Item).ToList();
+            character.Actions = character.Actions.Select(a => a as Action).ToList();
+        }
 
         return character;
     }
@@ -275,5 +289,29 @@ public class CharacterService
             _ => throw new ArgumentOutOfRangeException(nameof(playerClass), "Unknown player class")
         };
     }
+
+    private Armor chckArmorType(Item item)
+    {
+        if (item is Armor armor)
+        {
+            return armor;
+        }
+        else
+        {
+            throw new InvalidCastException("Item is not of type Armor.");
+        }
+    }
     
+    private Weapon chckWeaponType(Item item)
+    {
+        if (item is Weapon weapon)
+        {
+            return weapon;
+        }
+        else
+        {
+            throw new InvalidCastException("Item is not of type Weapon.");
+        }
+    }
+
 }

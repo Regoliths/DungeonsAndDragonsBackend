@@ -29,13 +29,18 @@ public static class DataSeeder
                             equipmentId: 1,
                             equipmentItems: new List<Item>
                             {
-                                new Item
+                                new Weapon()
                                 {
                                     Id = 1, Name = "Sword", Type = "Weapon", Quantity = 1, Weight = 3, Cost = 50
                                 },
-                                new Item
+                                new Armor()
                                 {
-                                    Id = 2, Name = "Shield", Type = "Armor", Quantity = 1, Weight = 5, Cost = 75,
+                                    Id = 2, Name = "Chainmail", Type = "Armor", Quantity = 1, Weight = 4, Cost = 100,
+                                    ArmorClass = 16, AcBonus = 0, ArmorType = "Medium"
+                                },
+                                new Armor
+                                {
+                                    Id = 33, Name = "Shield", Type = "Armor", Quantity = 1, Weight = 5, Cost = 75,
                                     ArmorClass = 2, AcBonus = 2, ArmorType = "Shield"
                                 }
                             },
@@ -85,13 +90,18 @@ public static class DataSeeder
                             equipmentId: 2,
                             equipmentItems: new List<Item>
                             {
-                                new Item
+                                new Weapon()
                                 {
                                     Id = 5, Name = "Bow", Type = "Weapon", Quantity = 1, Weight = 2, Cost = 100
                                 },
                                 new Item
                                 {
                                     Id = 6, Name = "Quiver", Type = "Ammunition", Quantity = 20, Weight = 1, Cost = 10
+                                },
+                                new Armor
+                                {
+                                    Id = 7, Name = "Leather Armor", Type = "Armor", Quantity = 1, Weight = 2,
+                                    Cost = 50, ArmorClass = 11, AcBonus = 0, ArmorType = "Light"
                                 }
                             },
                             inventoryId: 2,
@@ -99,10 +109,10 @@ public static class DataSeeder
                             {
                                 new Item
                                 {
-                                    Id = 7, Name = "Healing Potion", Type = "Consumable", Quantity = 2, Weight = 1,
+                                    Id = 77, Name = "Healing Potion", Type = "Consumable", Quantity = 2, Weight = 1,
                                     Cost = 50
                                 },
-                                new Item
+                                new Armor()
                                 {
                                     Id = 8, Name = "Elven Cloak", Type = "Armor", Quantity = 1, Weight = 1, Cost = 150,
                                     ArmorClass = 1, AcBonus = 1, ArmorType = "Light"
@@ -146,10 +156,10 @@ public static class DataSeeder
                                 {
                                     Id = 9, Name = "Axe", Type = "Weapon", Quantity = 1, Weight = 4, Cost = 60
                                 },
-                                new Item
+                                new Armor()
                                 {
-                                    Id = 10, Name = "Helmet", Type = "Armor", Quantity = 1, Weight = 3, Cost = 40,
-                                    ArmorClass = 1, AcBonus = 1, ArmorType = "Helmet"
+                                    Id = 10, Name = "Dwarven Plate", Type = "Armor", Quantity = 1, Weight = 8,
+                                    Cost = 200, ArmorClass = 18, AcBonus = 0, ArmorType = "Heavy"
                                 }
                             },
                             inventoryId: 3,
@@ -190,11 +200,11 @@ public static class DataSeeder
                             equipmentId: 4,
                             equipmentItems: new List<Item>
                             {
-                                new Item
+                                new Weapon()
                                 {
                                     Id = 13, Name = "Battle Axe", Type = "Weapon", Quantity = 1, Weight = 4, Cost = 70
                                 },
-                                new Item
+                                new Armor()
                                 {
                                     Id = 14, Name = "Chainmail", Type = "Armor", Quantity = 1, Weight = 5, Cost = 100,
                                     ArmorClass = 16, AcBonus = 0, ArmorType = "Medium"
@@ -248,7 +258,7 @@ public static class DataSeeder
                             equipmentId: 5,
                             equipmentItems: new List<Item>
                             {
-                                new Item
+                                new Weapon()
                                 {
                                     Id = 17, Name = "Staff", Type = "Weapon", Quantity = 1, Weight = 3, Cost = 200
                                 },
@@ -256,6 +266,11 @@ public static class DataSeeder
                                 {
                                     Id = 18, Name = "Spellbook", Type = "Miscellaneous", Quantity = 1, Weight = 2,
                                     Cost = 300
+                                },
+                                new Armor()
+                                {
+                                    Id = 19, Name = "Robes", Type = "Armor", Quantity = 1, Weight = 1, Cost = 150,
+                                    ArmorClass = 12, AcBonus = 0, ArmorType = "Light"
                                 }
                             },
                             inventoryId: 5,
@@ -263,7 +278,7 @@ public static class DataSeeder
                             {
                                 new Item
                                 {
-                                    Id = 19, Name = "Potion of Mana", Type = "Consumable", Quantity = 1, Weight = 1,
+                                    Id = 190, Name = "Potion of Mana", Type = "Consumable", Quantity = 1, Weight = 1,
                                     Cost = 100
                                 },
                                 new Item
@@ -296,11 +311,11 @@ public static class DataSeeder
                             equipmentId: 6,
                             equipmentItems: new List<Item>
                             {
-                                new Item
+                                new Weapon()
                                 {
                                     Id = 21, Name = "Staff", Type = "Weapon", Quantity = 1, Weight = 3, Cost = 250
                                 },
-                                new Item
+                                new Armor()
                                 {
                                     Id = 22, Name = "Robe", Type = "Armor", Quantity = 1, Weight = 1, Cost = 100
                                 }

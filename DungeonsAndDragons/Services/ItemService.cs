@@ -57,25 +57,26 @@ public class ItemService : IItemService
         {
             item.Cost = updateDto.Cost.Value;
         }
-        if (updateDto.DamageDice != null)
+        if(updateDto.Type != null && updateDto.Type.Equals("Armor", StringComparison.OrdinalIgnoreCase))
         {
-            item.DamageDice = updateDto.DamageDice;
+            item = new Armor
+            {
+                ArmorClass = updateDto.ArmorClass.Value,
+                AcBonus = updateDto.AcBonus.Value,
+                ArmorType = updateDto.ArmorType ?? string.Empty,
+                strengthRequirement = updateDto.StrengthRequirement ?? 0,
+                StealthDisadvantage = updateDto.StealthDisadvantage ?? false
+            };
         }
-        if (updateDto.DamageType != null)
+        else if (updateDto.Type != null && updateDto.Type.Equals("Weapon", StringComparison.OrdinalIgnoreCase))
         {
-            item.DamageType = updateDto.DamageType;
-        }
-        if (updateDto.ArmorClass.HasValue)
-        {
-            item.ArmorClass = updateDto.ArmorClass;
-        }
-        if (updateDto.AcBonus.HasValue)
-        {
-            item.AcBonus = updateDto.AcBonus;
-        }
-        if (updateDto.ArmorType != null)
-        {
-            item.ArmorType = updateDto.ArmorType;
+            item = new Weapon
+            {
+                DamageDice = updateDto.DamageDice ?? string.Empty,
+                DamageType = updateDto.DamageType ?? string.Empty,
+                Range = updateDto.Range ?? 0,
+                RangeType = updateDto.RangeType ?? string.Empty
+            };
         }
 
         await _context.SaveChangesAsync();
